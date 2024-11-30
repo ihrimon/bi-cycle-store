@@ -24,7 +24,7 @@ npm install dotenv
 npm install mongoose --save
 ```
 
-### typescript install and configuaration and run on server
+### TypeScript install and configuaration and run on server
 
 ```
 npm install typescript --save-dev
@@ -51,7 +51,7 @@ ts-node-dev --respawn --transpile-only server.ts
 }
 ```
 
-### add script in package.json
+### Add script in package.json
 
 ```
 {
@@ -61,31 +61,33 @@ ts-node-dev --respawn --transpile-only server.ts
 }
 ```
 
-### type definition for node express cors
+### Type definition for node express cors
 
 ```
 npm i --save-dev @types/node
 ```
+
 ```
 npm i --save-dev @types/express
 ```
+
 ```
 npm i --save-dev @types/cors
 ```
 
-### add 'devDependencies'
+### Add 'devDependencies'
 
 ```
 npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
 ```
 
-### eslint initialize
+### Eslint initialize
 
 ```
 npx eslint --init
 ```
 
-### add in eslint.config.mjs
+### Add in eslint.config.mjs
 
 ```
 {
@@ -96,7 +98,7 @@ npx eslint --init
 }
 ```
 
-### add scripts for eslint in the 'package.json' file.
+### Add scripts for eslint in the 'package.json' file.
 
 ```
 {
@@ -113,7 +115,7 @@ npx eslint --init
 npm i -D --exact prettier
 ```
 
-## create .prettierrc file and add this
+## Create .prettierrc file and add this
 
 ```
 {
@@ -122,13 +124,13 @@ npm i -D --exact prettier
 }
 ```
 
-### create .prettierignore file and add dist
+### Create .prettierignore file and add dist
 
 ```
 dist
 ```
 
-### add script in 'package.json' file
+### Add script in 'package.json' file
 
 ```
 "prettier": "prettier . --write"
@@ -136,15 +138,14 @@ dist
 
 # Project Features:
 
-### Bicycle Product CRUD Operations Features:
+- ### Bicycle Product CRUD Operations Features:
 
-Create: Add a new bicycle to the store.
--Read: Retrieve a list of bicycles or a single bicycle.
--Update: Edit an existing bicycle's details.
--Delete: Remove a bicycle from the store.
+  - Create: Add a new bicycle to the store.
+  - Read: Retrieve a list of bicycles or a single bicycle.
+  - Update: Edit an existing bicycle's details.
+  - Delete: Remove a bicycle from the store.
 
-### Order Bicycle Features:
-
--Create Order: Allow users to order bicycles.
--Order Details: Store the order details, including the customer email, bicycle info, quantity, and price.
--Revenue: Seller get the total revenue for total or specific product.
+- ### Order Bicycle Features:
+  - Create Order: Allow users to order bicycles.
+  - Order Details: Store the order details, including the customer email, bicycle info, quantity, and price.
+  - Revenue: Seller get the total revenue for all or specific product.

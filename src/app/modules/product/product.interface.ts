@@ -1,10 +1,10 @@
+// Create an interface for Product
 export interface IProduct {
-    save(): unknown;
-    name: string,
-    brand: string,
-    price: number,
-    type: 'Mountain' | 'Road' | 'Hybrid' | 'BMX' | 'Electric',
-    description: string,
-    quantity: number,
-    inStock: boolean
+  name: string;
+  brand: string;
+  price: number;
+  type: 'Mountain' | 'Road' | 'Hybrid' | 'BMX' | 'Electric';
+  description: string;
+  quantity: number;
+  inStock: boolean;
 }

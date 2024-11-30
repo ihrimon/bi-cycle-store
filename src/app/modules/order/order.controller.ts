@@ -2,59 +2,49 @@ import { Request, Response } from 'express';
 import { orderService } from './order.service';
 import Order from './order.model';
 
-// order controller
-const orderBicycle = async (req: Request, res: Response) => {
+// Controller for create a new Bicycle order
+const orderBicycle = async (req: Request, res: Response): Promise<void> => {
   try {
     const payload = req.body;
     const result = await orderService.orderBicycle(payload);
-    const { _id, ...rest } = result.toObject();
-    const responseData = { _id, ...rest };
 
-    // response from db
+    // Send success response after order creation
     res.status(201).json({
       message: 'Order created successfully',
-      success: true,
-      data: responseData,
+      status: true,
+      data: result,
     });
+    console.log('heelo');
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errors = Object.keys(error.errors).reduce((acc, key) => {
-        acc[key] = error.errors[key];
-        return acc;
-      }, {});
-      return res.status(400).json({
-        message: 'Validation failed',
-        success: false,
-        error: {
-          name: error.name,
-          errors,
-        },
-        stack: error.stack,
-      });
-    }
+    const err = error as Error;
+    const errors = {
+      name: err.name,
+      errors: err.errors,
+      stack: err.stack,
+    };
+
+    // Handle error and send failure response
     res.status(500).json({
-      message: 'Something went wrong',
+      message: 'Validation failed',
       success: false,
-      error: {
-        error,
-      },
-      stack: error.stack,
+      error: errors,
     });
   }
 };
 
-// Controller for get all Bicycle products
+// Controller for get all Orders from the database
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    // get data from db
     const result = await orderService.getAllOrders();
-    // response
+
+    // Send success response with all orders
     res.status(200).json({
       message: 'Orders retrieved successfully',
-      success: true,
+      status: true,
       data: result,
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
@@ -63,19 +53,21 @@ const getAllOrders = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for a specific Bicycle product
+// Controller for a specific order
 const getSpecificOrder = async (req: Request, res: Response) => {
   try {
+    // get specific order from db
     const orderId = req.params.orderId;
     const result = await orderService.getSpecificOrder(orderId);
 
-    // response
+    // Send success response
     res.status(200).json({
       message: 'Order retrieved successfully',
-      success: true,
+      status: true,
       data: result,
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
@@ -84,20 +76,22 @@ const getSpecificOrder = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for updating Bicycle product
+// Controller for update an existing order using ID
 const updatedOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
     const body = req.body;
     const result = await orderService.updatedOrder(orderId, body);
 
-    // response
+    // Send success response after order update
     res.status(200).json({
+      // Handle error and send failure response
       message: 'Bicycle updated successfully',
-      success: true,
+      status: true,
       data: result,
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
@@ -106,51 +100,61 @@ const updatedOrder = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for deleting Bicycle product
+// Controller for deleting an order using ID
 const deletedOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
     await orderService.deletedOrder(orderId);
 
-    // response
+    // Send success response after order deletion
     res.status(200).json({
       message: 'Bicycle deleted successfully',
-      success: true,
+      status: true,
       data: {},
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
-      success: false,
+      status: false,
       message: 'Something went wrong',
       error,
     });
   }
 };
 
-// order revenue controller
+// Controller for calculate total revenue from all orders
 const orderRevenue = async (req: Request, res: Response) => {
   try {
     // calculate total revenue by aggregation
     const result = await Order.aggregate([
+      // stage-1: Calculate revenue for each order
       {
         $project: {
-          totalRevenue: {
-            $multiply: ['$quantity', '$totalPrice'],
-          },
+          _id: null,
+          revenue: { $multiply: ['$totalPrice', '$quantity'] },
+        },
+      },
+      // stage-2: Calculate the sum of all revenues
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$revenue' },
         },
       },
     ]);
 
     if (result.length > 0) {
+      // Send success response with calculated revenue
       res.json({
         message: 'Revenue calculated successfully',
         status: true,
         data: {
-          totalRevenue: result[0].totalRevenue,
+          totalRevenue: result[0]?.totalRevenue,
         },
       });
     } else {
-      res.json({
+      // Send response for no orders exist in order collection
+      res.status(404).json({
         message: 'No orders found',
         status: false,
         data: {
@@ -159,6 +163,7 @@ const orderRevenue = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       message: 'Something went wrong',
       status: false,
@@ -167,6 +172,7 @@ const orderRevenue = async (req: Request, res: Response) => {
   }
 };
 
+// Exporting all order-related controllers
 export const orderController = {
   orderBicycle,
   getAllOrders,

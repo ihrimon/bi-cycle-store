@@ -2,7 +2,9 @@ import { Router } from 'express';
 import { productController } from './product.controller';
 
 // create a router
-const productRouter = Router();
+const productRouter = Router({
+    caseSensitive: true
+});
 
 /* all application routes */
 

@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { IOrder } from './order.interface';
 
+// Schema define for Orders
 const orderSchema = new Schema<IOrder>(
   {
     email: {
@@ -9,7 +10,7 @@ const orderSchema = new Schema<IOrder>(
       unique: true,
       validate: {
         validator: function (value: string) {
-          return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value);
+          return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.com$/.test(value);
         },
         message: '{VALUE} is not a valid email',
       },
@@ -22,10 +23,12 @@ const orderSchema = new Schema<IOrder>(
     quantity: {
       type: Number,
       required: [true, 'Quantity is required'],
+      min: [0, 'Quantity must be positive number'],
     },
     totalPrice: {
       type: Number,
       required: [true, 'Total Price is required'],
+      min: [0, 'Total Price must be positive number'],
     },
   },
   {
@@ -34,5 +37,6 @@ const orderSchema = new Schema<IOrder>(
   },
 );
 
+// Create and export a Order model for Orders
 const Order = model('Order', orderSchema);
 export default Order;

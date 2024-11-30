@@ -2,48 +2,35 @@ import { Request, Response } from 'express';
 import { productService } from './product.service';
 
 // Controller for creating a new Bicycle product
-const createBicycle = async (req: Request, res: Response) => {
+const createBicycle = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Create a new Bicycle product
     const payload = req.body;
     const result = await productService.createBicycle(payload);
-    const { _id, ...rest } = result.toObject();
-    const responseData = { _id, ...rest };
 
-    // response from db
+    // Send success response after product creation
     res.status(201).json({
       message: 'Bicycle created successfully',
       success: true,
-      data: responseData,
+      data: result,
     });
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errors = Object.keys(error.errors).reduce((acc, key) => {
-        acc[key] = error.errors[key];
-        return acc;
-      }, {});
-      return res.status(400).json({
-        message: 'Validation failed',
-        success: false,
-        error: {
-          name: error.name,
-          errors,
-        },
-        stack: error.stack,
-      });
-    }
+    const err = error as Error;
+    const errors = {
+      name: err.name,
+      errors: err.errors,
+      stack: err.stack,
+    };
+
+    // Handle error and send failure response
     res.status(500).json({
-      message: 'Something went wrong',
+      message: 'Validation failed',
       success: false,
-      error: {
-        error,
-      },
-      stack: error.stack,
+      error: errors,
     });
   }
 };
 
-// Controller for get all Bicycle products
+// Controller for get all Products from the database
 const getAllBicycle = async (req: Request, res: Response) => {
   try {
     // get data from db
@@ -52,7 +39,7 @@ const getAllBicycle = async (req: Request, res: Response) => {
     // response from db
     res.status(200).json({
       message: 'Bicycles retrieved successfully',
-      success: true,
+      status: true,
       data: result,
     });
   } catch (error) {
@@ -71,13 +58,14 @@ const getSpecificBicycle = async (req: Request, res: Response) => {
     const productId = req.params.productId;
     const result = await productService.getSpecificBicyle(productId);
 
-    // response from db
+    // Send success response
     res.status(200).json({
       message: 'Bicycle retrieved successfully',
-      success: true,
+      status: true,
       data: result,
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
@@ -86,20 +74,21 @@ const getSpecificBicycle = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for updating Bicycle product
+// Controller for update an existing Product using ID
 const updatedBicycle = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
     const body = req.body;
     const result = await productService.updatedBicycle(productId, body);
 
-    // response
+    // Send success response after order update
     res.status(200).json({
       message: 'Bicycle updated successfully',
-      success: true,
+      status: true,
       data: result,
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
@@ -108,19 +97,20 @@ const updatedBicycle = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for deleting Bicycle product
+// Controller for deleting Bicycle product using ID
 const deletedBicycle = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
     await productService.deletedBicycle(productId);
 
-    // response
+    // Send success response after product deletion
     res.status(200).json({
       message: 'Bicycle deleted successfully',
-      success: true,
+      status: true,
       data: {},
     });
   } catch (error) {
+    // Handle error and send failure response
     res.status(500).json({
       success: false,
       message: 'Something went wrong',
@@ -129,6 +119,7 @@ const deletedBicycle = async (req: Request, res: Response) => {
   }
 };
 
+// Exporting all product-related controllers
 export const productController = {
   createBicycle,
   getAllBicycle,

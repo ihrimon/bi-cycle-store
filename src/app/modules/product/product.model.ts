@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 
+// Schema define for the Bicycle products
 const productSchema = new Schema(
   {
     name: {
@@ -8,10 +9,10 @@ const productSchema = new Schema(
       required: [true, 'Bicycle name is required'],
       validate: {
         validator: function (value) {
-          return typeof value === 'string' && value.length> 0;
+          return typeof value === 'string' && value.length > 0;
         },
-        message: '{VALUE} is not valid, Name must be string'
-      }
+        message: '{VALUE} is not valid, Name must be string',
+      },
     },
     brand: {
       type: String,
@@ -47,6 +48,6 @@ const productSchema = new Schema(
   },
 );
 
-// Creating a Mongoose model for Bicycle products
+// Create and export a Product model for Bicycle products
 const Product = model('Product', productSchema);
 export default Product;

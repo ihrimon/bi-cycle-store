@@ -1,7 +1,7 @@
-import { IOrder } from "./order.interface";
-import Order from "./order.model";
+import { IOrder } from './order.interface';
+import Order from './order.model';
 
-// Order a Bicycle
+// Create a new Order for Bicycle
 const orderBicycle = async (payload: IOrder): Promise<IOrder> => {
   const result = await Order.create(payload);
   return result;
@@ -36,5 +36,5 @@ export const orderService = {
   getAllOrders,
   getSpecificOrder,
   updatedOrder,
-  deletedOrder
+  deletedOrder,
 };

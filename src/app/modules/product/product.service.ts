@@ -3,7 +3,7 @@ import Product from './product.model';
 
 // Create a new Bicycle product
 const createBicycle = async (payload: IProduct): Promise<IProduct> => {
-  const result = await await Product.create(payload);
+  const result = await Product.create(payload);
   return result;
 };
 
