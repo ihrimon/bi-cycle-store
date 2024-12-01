@@ -1,3 +1,15 @@
+# Tech Stack
+- TypeScript
+- Express.js
+- MongooDB
+- Mongoose
+  
+# NPM package
+- cors
+- dotenv
+- MongooDB
+- Mongoose
+
 # Project Setup
 
 ### Project initialize command

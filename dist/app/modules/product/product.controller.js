@@ -24,18 +24,16 @@ const createBicycle = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        const err = error;
-        const errors = {
-            name: err.name,
-            // errors: err.errors,
-            err,
-            stack: err.stack,
-        };
+        const errors = error;
         // Handle error and send failure response
         res.status(500).json({
             message: 'Validation failed',
             success: false,
-            error: errors,
+            error: {
+                name: errors.name,
+                errors,
+                stack: errors.stack,
+            },
         });
     }
 });
