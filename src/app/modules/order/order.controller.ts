@@ -12,14 +12,15 @@ const orderBicycle = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json({
       message: 'Order created successfully',
       status: true,
-      data: result,
+      data: result, 
     });
     console.log('heelo');
   } catch (error) {
     const err = error as Error;
     const errors = {
       name: err.name,
-      errors: err.errors,
+      // errors: err.errors,
+      err,
       stack: err.stack,
     };
 

@@ -17,7 +17,8 @@ const createBicycle = async (req: Request, res: Response): Promise<void> => {
     const err = error as Error;
     const errors = {
       name: err.name,
-      errors: err.errors,
+      // errors: err.errors,
+      err,
       stack: err.stack,
     };
 
