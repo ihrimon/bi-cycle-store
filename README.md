@@ -58,8 +58,8 @@ ts-node-dev --respawn --transpile-only server.ts
 
 ```
 {
-  "rootDir": "./src
-"outDir": "./dist"
+  "rootDir": "./src,
+  "outDir": "./dist"
 }
 ```
 
