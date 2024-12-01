@@ -14,19 +14,17 @@ const createBicycle = async (req: Request, res: Response): Promise<void> => {
       data: result,
     });
   } catch (error) {
-    const err = error as Error;
-    const errors = {
-      name: err.name,
-      // errors: err.errors,
-      err,
-      stack: err.stack,
-    };
+    const errors = error as Error;
 
     // Handle error and send failure response
     res.status(500).json({
       message: 'Validation failed',
       success: false,
-      error: errors,
+      error: {
+        name: errors.name,
+        errors,
+        stack: errors.stack,
+      },
     });
   }
 };
